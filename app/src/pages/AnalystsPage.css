@@ -1,0 +1,146 @@
+.container-wide {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.analysts-page {
+  margin: 2rem auto;
+}
+
+.page-title {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 48px;
+  color: #1E1E1E;
+  margin-bottom: 2rem;
+}
+
+.analysts-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* центрируем карточки */
+  gap: 20px;
+}
+
+.analyst-card {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  background-color: #F5F1EE;
+  border-radius: 24px;
+  padding: 24px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid #B5A1A1;
+  width: 800px;
+  /* фиксированная ширина */
+  max-width: 100%;
+  /* на маленьких экранах будет адаптироваться */
+  box-sizing: border-box;
+}
+
+.analyst-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  border-color: #ED6C4F;
+}
+
+.card-avatar {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 3px solid #ED6C4F;
+}
+
+.card-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-name {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 28px;
+  color: #1E1E1E;
+  margin: 0;
+}
+
+.card-specialization {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 20px;
+  color: #ED6C4F;
+  font-weight: 500;
+}
+
+.card-experience {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 18px;
+  color: #4A4A4A;
+}
+
+.card-price {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 28px;
+  color: #ED6C4F;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 2rem;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 18px;
+}
+
+.card-rating {
+  color: #FFB800;
+  /* жёлтый для звёзд и текста, если есть отзывы */
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.card-rating.no-reviews {
+  color: #999;
+  /* серый, если отзывов нет */
+}
+
+.rating-count {
+  color: inherit;
+  /* наследует цвет родителя */
+  margin-left: 4px;
+  font-size: 14px;
+}
+
+.company-mini {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.company-mini-logo {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #ED6C4F;
+}
+
+.company-mini-name {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 14px;
+  color: #4A4A4A;
+}

@@ -1,0 +1,293 @@
+/* ProfilePage.css */
+
+.profile-page {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #F5F1EE;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Шапка профиля – сетка 12 колонок */
+.profile-header {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 8px;
+  margin-bottom: 2rem;
+  align-items: center;
+}
+
+.profile-avatar {
+  grid-column: span 2;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border: 4px solid #ED6C4F;
+  border-radius: 50%;
+}
+
+.profile-header-info {
+  grid-column: span 8;
+  display: flex;
+  flex-direction: column;
+  gap: 4px; /* отступ между именем и рейтингом */
+}
+
+.profile-name-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profile-name-row h1 {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 36px;
+  color: #1E1E1E;
+  margin-left: 20px;
+}
+
+.profile-rating {
+  font-size: 20px;
+  color: #FFB800;
+  font-family: 'Fira Sans', sans-serif;
+}
+
+.profile-rating.no-reviews {
+  color: #999;
+}
+
+.rating-count {
+  color: inherit;
+  margin-left: 4px;
+  font-size: 14px;
+}
+
+/* Контейнер для кнопок (если их несколько) */
+.profile-actions {
+  grid-column: span 2;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end; /* прижимаем к правому краю */
+}
+
+.btn-edit,
+.btn-create-project,
+.btn-view-responses {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.btn-edit {
+  background-color: #ED6C4F;
+  color: white;
+}
+
+.btn-edit:hover {
+  background-color: #d85c3f;
+}
+
+.btn-create-project {
+  background-color: #3E5A81;
+  color: white;
+}
+
+.btn-create-project:hover {
+  background-color: #2e4a6f;
+}
+
+.btn-view-responses {
+  background-color: #3E5A81;
+  color: white;
+}
+
+.btn-view-responses:hover {
+  background-color: #2e4a6f;
+}
+
+/* Детали профиля */
+.profile-details {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 12px;
+  margin-bottom: 2rem;
+}
+
+.detail-row {
+  display: contents;
+}
+
+.detail-label {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 18px;
+  color: #1E1E1E;
+  grid-column: span 2;
+  align-self: start;
+}
+
+.detail-value {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 16px;
+  color: #4A4A4A;
+  grid-column: span 10;
+  align-self: start;
+  word-break: break-word;
+}
+
+/* Блок "О себе" */
+.profile-description {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.profile-description h3 {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 24px;
+  color: #1E1E1E;
+  margin-bottom: 1rem;
+}
+
+.profile-description p {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #4A4A4A;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+.reviews-section {
+  margin-top: 12px;
+  width: 1200px;
+  padding-left: 40px;
+}
+
+/* Карточка отзывов */
+.profile-reviews-card {
+  width: 1200px;
+  background-color: #F5F1EE;
+  border-radius: 24px;
+  padding: 24px;
+  margin-top: 12px;
+  border: 1px solid #B5A1A1;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+.reviews-title {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 24px;
+  color: #1E1E1E;
+  margin: 0 0 1rem 0;
+  text-align: left;
+}
+
+.no-reviews {
+  text-align: left;
+  font-family: 'Fira Sans', sans-serif;
+  color: #999;
+  padding: 20px;
+  margin: 0;
+}
+
+.review-item {
+  background-color: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.review-item:last-child {
+  margin-bottom: 0;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.review-rating {
+  color: #FFB800;
+  font-size: 18px;
+}
+
+.review-date {
+  color: #999;
+  font-size: 14px;
+}
+
+.review-text {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 16px;
+  color: #4A4A4A;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 2rem;
+  font-family: 'Fira Sans', sans-serif;
+}
+
+/* Стили для проектов */
+.projects-section {
+  margin-top: 2rem;
+}
+
+.projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.project-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background-color: #F5F1EE;
+  border-radius: 16px;
+  padding: 16px;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s;
+  border: 1px solid #B5A1A1;
+}
+
+.project-card:hover {
+  transform: translateY(-2px);
+  border-color: #ED6C4F;
+}
+
+.project-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 2px solid #ED6C4F;
+}
+
+.project-info {
+  flex: 1;
+}
+
+.project-info h3 {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 20px;
+  margin: 0 0 8px 0;
+  color: #1E1E1E;
+}
+
+.project-spec {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 14px;
+  color: #4A4A4A;
+  margin: 2px 0;
+}

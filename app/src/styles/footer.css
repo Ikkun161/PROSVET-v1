@@ -1,0 +1,82 @@
+.footer {
+  background-color: #ED6C4F;
+  padding: 60px 0 30px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 5fr 3fr 4fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.footer-description-wrapper {
+  width: 400px;
+  height: auto;
+}
+
+.footer-logo {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.footer-description {
+  padding-top: 36px;
+  line-height: 36px;
+  width: 400px;
+  height: auto;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 24px;
+  color: #FFFFFF;
+  margin: 0;
+  white-space: pre-line;
+  overflow: hidden;
+}
+
+.footer-nav h4 {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 36px;
+  margin-bottom: 0px;
+  color: #FFFFFF;
+}
+
+.footer-nav--nav ul {
+  margin-top: 74px;
+}
+
+.footer-nav--legal ul {
+  margin-top: 24px;
+}
+
+.footer-nav ul {
+  list-style: none;
+}
+
+.footer-nav li {
+  margin-bottom: 10px;
+}
+
+.footer-nav a {
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+  color: #FFFFFF;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.footer-nav a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 30px;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-family: 'Fira Sans', sans-serif;
+}

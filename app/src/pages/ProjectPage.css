@@ -1,0 +1,183 @@
+.project-page {
+  width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #F5F1EE;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.project-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.project-avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 24px;
+  object-fit: cover;
+  border: 4px solid #ED6C4F;
+}
+
+.project-header-info {
+  flex: 1;
+}
+
+.project-header-info h1 {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 48px;
+  color: #1E1E1E;
+  margin: 0 0 1rem 0;
+}
+
+.company-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #F5F1EE;
+  padding-left: 4px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-radius: 16px;
+}
+
+.company-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ED6C4F;
+}
+
+.company-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  align-items: flex-start; /* выравнивание по левому краю */
+}
+
+.company-name {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 24px;
+  color: #1E1E1E;
+  line-height: 1;           /* убираем лишнее межстрочное пространство */
+  margin-bottom: 8px;
+  padding: 0;
+}
+
+.company-rating {
+  font-size: 18px;
+  color: #FFB800;
+  text-align: left;
+  font-family: 'Fira Sans', sans-serif;
+  line-height: 1;           /* то же самое */
+  margin: 0;
+  padding: 0;
+}
+
+.company-rating.no-reviews {
+  color: #999;
+}
+
+.rating-count {
+  color: inherit;
+  margin-left: 4px;
+  font-size: 14px;
+}
+
+.btn-view-responses,
+.btn-respond {
+  padding: 12px 24px;
+  background-color: #ED6C4F;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-left: auto;
+}
+
+.btn-view-responses:hover,
+.btn-respond:hover {
+  background-color: #d85c3f;
+}
+
+.btn-view-responses {
+  background-color: #3E5A81;
+}
+
+.btn-view-responses:hover {
+  background-color: #2e4a6f;
+}
+
+.project-description {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.project-description h3 {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 24px;
+  color: #1E1E1E;
+  margin-bottom: 1rem;
+}
+
+.project-description p {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #4A4A4A;
+  white-space: pre-wrap;
+}
+
+.specialists-section {
+  margin-top: 2rem;
+}
+
+.specialists-section h3 {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 24px;
+  color: #1E1E1E;
+  margin-bottom: 1.5rem;
+}
+
+.specialists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.specialist-card {
+  background-color: #F5F1EE;
+  border: 2px solid #F0957F;
+  border-radius: 24px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.specialist-card:hover {
+  transform: translateY(-5px);
+}
+
+.specialist-card h4 {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #ED6C4F;
+}
+
+.specialist-price {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 20px;
+  color: #4A4A4A;
+  font-weight: 500;
+}

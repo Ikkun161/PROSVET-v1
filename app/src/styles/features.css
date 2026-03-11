@@ -1,0 +1,108 @@
+.features {
+  padding: 80px 0 40px;
+  background-color: #F9F9F9;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.features-title {
+  text-align: left;
+  margin-bottom: 48px;
+  color: #ED6C4F;
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 48px;
+  font-weight: 600;
+}
+
+.accordion {
+  max-width: 100%;
+}
+
+.accordion-item {
+  scroll-margin-top: 30px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 24px 0;
+}
+
+.accordion-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.accordion-icon {
+  width: 101px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 24px;
+}
+
+.accordion-icon img {
+  width: 101px;
+  height: auto;
+  display: block;
+}
+
+.accordion-title {
+  flex: 1;
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 36px;
+  font-weight: 600;
+  color: #1E1E1E;
+}
+
+.accordion-toggle {
+  font-size: 48px;
+  font-weight: 400;
+  color: #ED6C4F;
+  width: 40px;
+  text-align: center;
+}
+
+.accordion-content-wrapper {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.accordion-content-wrapper.open {
+  max-height: 1000px;
+  opacity: 1;
+}
+
+.accordion-content {
+  margin-top: 24px;
+  margin-bottom: 24px;
+  margin-left: 125px;
+  padding-right: 40px;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 24px;
+  line-height: 1.5;
+  color: #4A4A4A;
+  white-space: pre-line;
+}
+
+@media (max-width: 800px) {
+  .accordion-icon {
+    width: 60px;
+    margin-right: 16px;
+  }
+
+  .accordion-icon img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .accordion-content {
+    margin-left: 76px;
+    font-size: 20px;
+  }
+
+  .accordion-toggle {
+    font-size: 32px;
+  }
+}

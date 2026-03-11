@@ -1,0 +1,177 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: #FFFFFF;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: #1E1E1E;
+}
+
+.nav-group {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-link {
+  color: #1E1E1E;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: 'Fira Sans', sans-serif;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: #ED6C4F;
+}
+
+/* Дропдаун */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Общие стили для кнопок регистрации и входа */
+.btn-register,
+.btn-login {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  border: none;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* Специфичные стили для регистрации */
+.btn-register {
+  background: transparent;
+  border: 1px solid #ED6C4F;
+  border-radius: 16px;
+  color: #ED6C4F;
+}
+
+.btn-register:hover {
+  background-color: #ED6C4F;
+  color: #FFFFFF;
+}
+
+/* Специфичные стили для входа */
+.btn-login {
+  background-color: #3E5A81;
+  border-radius: 8px;
+  color: #FFFFFF;
+}
+
+.btn-login:hover {
+  background-color: #2e4a6f;
+}
+
+/* Иконка-стрелка */
+.arrow-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* Выпадающее меню */
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 100%;
+  background-color: #FFFFFF;
+  border: 1px solid #B5A1A1;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  overflow: hidden;
+  padding: 8px 0;
+}
+
+/* Пункты меню */
+.dropdown-item {
+  display: block;
+  padding: 10px 16px;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 16px;
+  color: #1E1E1E;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.dropdown-item:hover {
+  background-color: #F5F1EE;
+  color: #ED6C4F;
+}
+
+.profile-menu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.profile-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: #1E1E1E;
+  font-family: 'Fira Sans', sans-serif;
+}
+
+.mini-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ED6C4F;
+}
+
+.btn-logout {
+  padding: 8px 16px;
+  background-color: transparent;
+  border: 1px solid #ED6C4F;
+  border-radius: 8px;
+  color: #ED6C4F;
+  font-family: 'Fira Sans', sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-logout:hover {
+  background-color: #ED6C4F;
+  color: white;
+}

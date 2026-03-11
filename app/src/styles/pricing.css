@@ -1,0 +1,95 @@
+.for-whom {
+  padding: 64px 0 64px;
+  background-color: #FFFFFF;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.for-whom-title {
+  text-align: left;
+  margin-bottom: 48px;
+  color: #ED6C4F;
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 40px;
+  font-weight: 600;
+}
+
+.for-whom-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.for-whom-card {
+  background-color: #F5F1EE;
+  border: 4px solid #F0957F;
+  border-radius: 24px;
+  padding: 24px 30px 30px 30px;
+  transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.for-whom-card:hover {
+  transform: translateY(-5px);
+}
+
+.for-whom-card h3 {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 48px;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: #ED6C4F;
+  line-height: 1.2;
+}
+
+.for-whom-list {
+  list-style: none;
+  margin: 0 0 32px 0;
+  padding: 0;
+  flex-grow: 1;
+}
+
+.for-whom-list li {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 20px;
+  line-height: 1.4;
+  color: #4A4A4A;
+  margin-bottom: 16px;
+  padding-left: 24px;
+  position: relative;
+}
+
+.for-whom-list li::before {
+  content: "•";
+  color: #ED6C4F;
+  font-size: 24px;
+  position: absolute;
+  left: 0;
+  top: -2px;
+}
+
+.for-whom-card .btn-card {
+  display: block;
+  width: 100%;
+  height: 72px;
+  background-color: #ED6C4F;
+  border: none;
+  border-radius: 14px;
+  color: #FFFFFF;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  text-align: center;
+  text-decoration: none;
+  line-height: 72px;
+  transition: background-color 0.2s;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.for-whom-card .btn-card:hover {
+  background-color: #d85c3f;
+}

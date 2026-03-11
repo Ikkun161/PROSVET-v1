@@ -1,0 +1,613 @@
+/* ===== ПОДКЛЮЧЕНИЕ ШРИФТОВ (TTF) ===== */
+@font-face {
+  font-family: 'Fira Sans';
+  src: url('./fonts/FiraSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Fira Sans';
+  src: url('./fonts/FiraSans-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TRY Grtsk';
+  src: url('./fonts/TRYGrtsk-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ===== ОБЩИЕ СБРОСЫ ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Fira Sans', sans-serif;
+  background-color: #FFFFFF;
+  color: #1E1E1E;
+  line-height: 1.5;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#root {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ===== КОНТЕЙНЕР ===== */
+.container {
+  width: 1440px;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 100px;          /* отступы 100px слева и справа */
+  box-sizing: border-box;
+}
+
+/* ===== АКЦЕНТНЫЙ ЦВЕТ ===== */
+.accent {
+  color: #ED6C4F;
+}
+
+/* ===== ШАПКА ===== */
+.header {
+  padding: 24px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  background-color: #FFFFFF;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: #1E1E1E;
+}
+
+.nav-group {
+  display: flex;
+  align-items: center;
+  gap: 32px;                 /* отступ между всеми элементами справа */
+}
+
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;                 /* отступ между кнопками "Зарегистрироваться" и "Войти" */
+}
+
+/* Ссылки (Функционал, Тарифы) */
+.nav-link {
+  color: #1E1E1E;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: 'Fira Sans', sans-serif;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: #ED6C4F;
+}
+
+/* Кнопка "Зарегистрироваться" */
+.btn-register {
+  width: 196px;
+  height: 40px;
+  background: transparent;
+  border: 1px solid #ED6C4F;
+  border-radius: 16px;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+  color: #ED6C4F;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: 'Fira Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-register:hover {
+  background-color: #ED6C4F;
+  color: #FFFFFF;
+}
+
+/* Кнопка "Войти" */
+.btn-login {
+  width: 64px;
+  height: 40px;
+  background-color: #3E5A81;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: 'Fira Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-login:hover {
+  background-color: #2e4a6f;
+}
+
+/* ===== HERO ===== */
+.hero {
+  height: 916px;
+  background-image: url('./img/graffik.svg');
+  background-size: 1365px 822px;   /* точный размер изображения */
+  background-repeat: no-repeat;
+  background-position: center;      /* можно изменить */
+  padding: 128px 0 80px;     /* верхний отступ 128px от хедера */
+  text-align: center;
+  background-color: #FFFFFF;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.hero h1 {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 48px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 64px;   /* ← новый отступ */
+  color: #1E1E1E;
+}
+.hero h1 .accent {
+  color: #ED6C4F;
+}
+
+.hero-sub {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.4;
+  max-width: 900px;
+  margin: 0 auto 56px;   /* ← новое значение */
+  color: #4A4A4A;
+}
+
+.hero-sub .accent {
+  color: #ED6C4F;
+  font-family: 'Fira Sans', sans-serif; /* наследует размер 24px */
+  
+}
+
+/* Кнопка "Сделай шаг в будущее" */
+.hero .btn-primary {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 32px;
+  font-weight: 400;          /* regular */
+  width: 424px;
+  height: 69px;
+  padding: 12px 0;
+  border-radius: 24px;
+  box-shadow: 4px 8px 16px 0px rgba(0, 0, 0, 0.25);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-sizing: border-box;
+  border: none;
+  background: #ED6C4F;
+  color: #FFFFFF;
+  transition: background-color 0.2s;
+}
+
+.hero .btn-primary:hover {
+  background: #d85c3f;
+}
+
+/* ===== ФУНКЦИОНАЛ ===== */
+/* Секция функционала (обновлённая) */
+.features {
+  padding: 80px 0;
+  background-color: #F9F9F9;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.features-title {
+  text-align: left;
+  margin-bottom: 48px;          /* отступ до первого блока */
+  color: #ED6C4F;
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 48px;
+  font-weight: 600;
+}
+
+/* Аккордеон */
+.accordion {
+  max-width: 100%;
+}
+
+.accordion-item {
+  scroll-margin-top: 30px; 
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 24px 0;               /* внутренние отступы блока */
+}
+
+
+
+
+/* Обёртка для анимации */
+.accordion-content-wrapper {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.accordion-content-wrapper.open {
+  max-height: 1000px;   /* достаточно большое значение для любого контента */
+  opacity: 1;
+}
+/* Контент внутри (отступы, шрифт) */
+.accordion-content {
+  margin-top: 24px;
+  margin-bottom: 24px;   
+  margin-left: 56px;
+  padding-right: 40px;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 24px;
+  line-height: 1.6;
+  color: #4A4A4A;
+}
+
+
+.accordion-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.accordion-icon {
+  width: 101px;              /* ширина контейнера равна ширине иконки */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 24px;        /* увеличьте при необходимости, например, 24px */
+}
+
+.accordion-icon img {
+  width: 101px;              /* размер самой иконки – подберите под свой дизайн */
+  height: auto;
+  display: block;
+}
+
+.accordion-title {
+  flex: 1;
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 36px;        /* новый размер */
+  font-weight: 600;
+  color: #1E1E1E;
+}
+
+.accordion-toggle {
+  font-size: 48px;
+  font-weight: 400;
+  color: #ED6C4F;
+  width: 40px;
+  text-align: center;
+}
+
+@media (max-width: 800px) {
+  .accordion-toggle {
+    font-size: 32px;        /* поменьше на мобилках */
+  }
+}
+
+.accordion-content {
+  margin-top: 16px;
+  margin-left: 125px;        /* 101px (иконка) + 24px (отступ) */
+  padding-right: 40px;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 24px;
+  line-height: 1.5;
+  color: #4A4A4A;
+  white-space: pre-line;
+}
+
+
+/* Адаптивность для аккордеона */
+/* Адаптивность */
+@media (max-width: 800px) {
+  .accordion-icon {
+    width: 60px;              /* уменьшенная ширина для мобильных */
+    margin-right: 16px;
+  }
+  .accordion-icon img {
+    width: 60px;
+    height: 60px;
+  }
+  .accordion-content {
+    margin-left: 76px;        /* 60px + 16px */
+    font-size: 20px;
+  }
+  /* остальные стили */
+}
+
+/* ===== ТАРИФЫ ===== */
+
+.pricing-title {
+  text-align: left;
+  margin-bottom: 48px;          /* такой же отступ, как у .features-title */
+  color: #ED6C4F;
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 40px;
+  font-weight: 600;
+}
+
+.pricing {
+  padding: 80px 0;
+  background-color: #FFFFFF;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-top: 40px;
+}
+
+/* Карточка тарифа */
+.tariff-card {
+  background-color: #F5F1EE;
+  border: 4px solid #F0957F;
+  border-radius: 24px;
+  padding: 24px 30px 0 30px;    /* верхний padding 24px, нижний убран */
+  box-shadow: none;
+  transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  height: 100%;                 /* растягиваем на всю высоту ячейки сетки */
+}
+
+.tariff-rectangle {
+  background-color: #F0957F;     /* цвет обводки */
+  margin-top: 24px;               /* отступ от последнего элемента (кнопки) */
+  flex: 1;                        /* занимает всё свободное место внизу */
+  width: 100%;                    /* на всю ширину карточки (с учётом padding) */
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+}
+
+.tariff-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Название карточки (START, PRO, TOP) */
+.tariff-card h3 {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 48px;
+  font-weight: 600;
+  margin: 0 0 16px 0; /* отступ снизу 16px */
+  color: #ED6C4F;
+  line-height: 1.2;
+}
+
+/* Подзаголовок "Оборот ..." */
+.tariff-sub {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  margin: 0 0 16px 0;                 /* отступ снизу 16px */
+  color: #1E1E1E;                      /* можно заменить на #4A4A4A, если нужно */
+}
+
+/* Список характеристик */
+.tariff-features {
+  list-style: none;
+  margin: 0 0 32px 0;                  /* нижний отступ до цены */
+  padding: 0;
+}
+
+.tariff-features li {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 20px;
+  line-height: 1.4;
+  color: #4A4A4A;
+}
+
+/* Первый пункт списка (До 5 магазинов...) — без левого отступа, нижний отступ 32px */
+.tariff-features li:first-child {
+  margin-bottom: 32px;
+}
+
+/* Второй и третий пункты (Полный доступ..., Подробный видеоурок...) — левый отступ 16px */
+.tariff-features li:nth-child(2),
+.tariff-features li:nth-child(3) {
+  margin-left: 16px;
+  margin-bottom: 16px;                  /* отступ между вторым и третьим */
+}
+
+/* У последнего пункта убираем нижний отступ */
+.tariff-features li:last-child {
+  margin-bottom: 0;
+}
+
+/* Цена */
+.price {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 48px;
+  font-weight: 600;
+  margin: 0 0 10px 0;                   /* отступ снизу до кнопки */
+  color: #1E1E1E;
+}
+
+.price small {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #8A8A8A;
+}
+
+/* Кнопка "Выбрать тариф" */
+.btn-card {
+  display: block;
+  text-align: center;
+  background: transparent;
+  border: 1px solid #ED6C4F;
+  color: #ED6C4F;
+  padding: 14px;
+  border-radius: 40px;
+  text-decoration: none;
+  font-weight: 600;
+  font-family: 'Fira Sans', sans-serif;
+  margin-top: 10px;                     /* небольшой отступ сверху */
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-card:hover {
+  background: #ED6C4F;
+  color: #FFFFFF;
+}
+
+/* ===== ПОДВАЛ ===== */
+.footer {
+  background-color: #F9F9F9;
+  padding: 60px 0 30px;
+  border-top: 1px solid rgba(0,0,0,0.05);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.footer-logo {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #1E1E1E;
+}
+
+.footer-description {
+  font-family: 'Fira Sans', sans-serif;
+  color: #4A4A4A;
+  max-width: 300px;
+}
+
+.footer-nav h4 {
+  font-family: 'TRY Grtsk', sans-serif;
+  margin-bottom: 16px;
+  font-size: 18px;
+  color: #1E1E1E;
+}
+
+.footer-nav ul {
+  list-style: none;
+}
+
+.footer-nav li {
+  margin-bottom: 10px;
+}
+
+.footer-nav a {
+  font-family: 'Fira Sans', sans-serif;
+  color: #4A4A4A;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-nav a:hover {
+  color: #ED6C4F;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 30px;
+  border-top: 1px solid rgba(0,0,0,0.05);
+  color: #8A8A8A;
+  font-size: 14px;
+  font-family: 'Fira Sans', sans-serif;
+}
+
+/* ===== АДАПТИВНОСТЬ ===== */
+@media (max-width: 1500px) {
+  body {
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 1000px) {
+  .container {
+    padding: 0 40px;
+  }
+
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header .container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .hero h1 {
+    font-size: 36px;
+  }
+
+  .hero-sub {
+    font-size: 20px;
+  }
+
+  .hero .btn-primary {
+    width: 100%;
+    max-width: 424px;
+    height: auto;
+    padding: 12px 20px;
+    white-space: normal;
+    font-size: 28px; /* чуть меньше на мобилках, если нужно */
+  }
+
+  .nav-group {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+

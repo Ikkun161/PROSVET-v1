@@ -1,0 +1,25 @@
+# Зависимости
+**/node_modules
+**/venv
+**/__pycache__
+*.pyc
+*.pyo
+*.pyd
+
+# Локальные настройки
+.env
+.vscode
+.idea
+*.db
+*.sqlite3
+
+# Сборки / логи
+logs
+*.log
+dist
+build
+*.egg-info
+
+# Временные файлы ОС
+Thumbs.db
+.DS_Store
