@@ -16,3 +16,4 @@ class Project(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     company = relationship("User", back_populates="projects")
+    applications = relationship("Application", back_populates="project", cascade="all, delete-orphan")

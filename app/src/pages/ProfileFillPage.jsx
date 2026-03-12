@@ -87,7 +87,7 @@ function ProfileFillPage() {
 
   const handleUploadAvatar = async () => {
     if (!avatarFile) {
-      navigate('/dashboard');
+      navigate('/profile/my');
       return;
     }
     setLoading(true);
@@ -105,7 +105,7 @@ function ProfileFillPage() {
         const err = await response.json();
         throw new Error(err.detail || 'Ошибка загрузки фото');
       }
-      navigate('/dashboard');
+      navigate('/profile/my');
     } catch (err) {
       setError(err.message);
     } finally {

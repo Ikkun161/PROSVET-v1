@@ -36,6 +36,8 @@
 
 .company-info {
   display: flex;
+  width: auto;
+  margin-right: 20px;
   align-items: center;
   gap: 12px;
   background-color: #F5F1EE;
@@ -180,4 +182,208 @@
   font-size: 20px;
   color: #4A4A4A;
   font-weight: 500;
+}
+
+.apply-form {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #F5F1EE;
+  border-radius: 16px;
+  border: 1px solid #B5A1A1;
+}
+.apply-form h3 {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 24px;
+  margin: 0 0 1rem 0;
+}
+.apply-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #B5A1A1;
+  border-radius: 8px;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 16px;
+  margin-bottom: 1rem;
+}
+.form-actions {
+  display: flex;
+  gap: 12px;
+}
+.form-actions button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Fira Sans', sans-serif;
+  cursor: pointer;
+}
+.form-actions button[type="submit"] {
+  background-color: #ED6C4F;
+  color: white;
+}
+.form-actions button[type="button"] {
+  background-color: transparent;
+  border: 1px solid #999;
+  color: #333;
+}
+
+.btn-respond-card {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background-color: #ED6C4F;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.btn-respond-card:hover {
+  background-color: #d85c3f;
+}
+
+.applied-badge {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background-color: #ccc;
+  color: #666;
+  border-radius: 8px;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 14px;
+  text-align: center;
+}
+
+.apply-form {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #F5F1EE;
+  border-radius: 16px;
+  border: 1px solid #B5A1A1;
+}
+
+.apply-form h3 {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 24px;
+  margin: 0 0 1rem 0;
+}
+
+.apply-textarea {
+  width: 100%;
+  padding: 12px;
+  background-color: #F5F1EE;      /* цвет как у блока */
+  border: 1px solid #B5A1A1;
+  border-radius: 8px;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 16px;
+  margin-bottom: 1rem;
+  color: #1E1E1E;                  /* текст чёрный при вводе */
+}
+
+.apply-textarea::placeholder {
+  color: #B0B0B0;                  /* серый плейсхолдер */
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.form-actions button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Fira Sans', sans-serif;
+  cursor: pointer;
+}
+
+.form-actions button[type="submit"] {
+  background-color: #ED6C4F;
+  color: white;
+}
+
+.form-actions button[type="button"] {
+  background-color: transparent;
+  border: 1px solid #999;
+  color: #333;
+}
+
+.btn-respond-card {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background-color: #ED6C4F;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.btn-respond-card:hover {
+  background-color: #d85c3f;
+}
+
+.applied-badge {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background-color: #ccc;
+  color: #666;
+  border-radius: 8px;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Уведомления */
+.notification {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-family: 'Fira Sans', sans-serif;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1000;
+  animation: slideIn 0.3s ease-out;
+}
+
+.notification.success {
+  background-color: #4CAF50;
+}
+
+.notification.error {
+  background-color: #f44336;
+}
+
+.company-link {
+  text-decoration: none;
+  color: inherit;
+  display: inline-block;
+  width: fit-content;
+  transition: opacity 0.2s;
+}
+
+.company-link:hover .company-info {
+  border-color: #ED6C4F; /* подсветка при наведении */
+  box-shadow: 0 2px 8px rgba(237, 108, 79, 0.2);
+}
+
+.company-link:hover {
+  opacity: 0.9;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }

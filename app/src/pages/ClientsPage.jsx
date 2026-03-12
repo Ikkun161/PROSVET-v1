@@ -1,244 +1,287 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import AuthHeader from '../components/AuthHeader';
 import { apiFetch } from '../utils/api';
-import './ProfilePage.css';
+import './AnalystsPage.css';
 
-function ClientProfilePage() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [profile, setProfile] = useState(null);
+function ClientsPage() {
+  const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [isOwnProfile, setIsOwnProfile] = useState(false);
-  const [reviews, setReviews] = useState([]);
-  const [averageRating, setAverageRating] = useState(0);
-  const [reviewCount, setReviewCount] = useState(0);
-  const [projects, setProjects] = useState([]);
 
+  // Основные фильтры (применяемые)
+  const [filters, setFilters] = useState({
+    industries: [],
+    foundedMin: '',
+    foundedMax: '',
+    minRating: '',
+  });
+
+  // Локальные фильтры для модального окна
+  const [localFilters, setLocalFilters] = useState({ ...filters });
+  const [showFilters, setShowFilters] = useState(false);
+
+  // Сортировка
+  const [sortBy, setSortBy] = useState('rating');
+  const [sortOrder, setSortOrder] = useState('desc');
+
+  // Загрузка данных
   useEffect(() => {
-    const fetchProfile = async () => {
-      const token = localStorage.getItem('token');
-      const isMyProfile = id === 'my' || !id;
-
+    const fetchCompanies = async () => {
       try {
-        if (isMyProfile) {
-          // Свой профиль – нужен токен
-          if (!token) {
-            navigate('/login');
-            return;
-          }
-          const profileRes = await apiFetch('/client/profiles/me');
-          if (profileRes.status === 401) {
-            setLoading(false);
-            return;
-          }
-          if (profileRes.status === 404) {
-            navigate('/client/profile/fill');
-            return;
-          }
-          if (!profileRes.ok) {
-            const err = await profileRes.json();
-            throw new Error(err.detail || 'Ошибка загрузки профиля');
-          }
-          const profileData = await profileRes.json();
-          setProfile(profileData);
-          setIsOwnProfile(true);
-          const companyId = profileData.user_id;
-          if (companyId) {
-            await loadReviews(companyId);
-            await loadProjects(companyId);
-          }
-        } else {
-          // Чужой профиль по ID
-          const profileRes = await apiFetch(`/client/profiles/user/${id}`);
-          if (profileRes.status === 404) {
-            setError('Профиль компании не найден');
-            setLoading(false);
-            return;
-          }
-          if (!profileRes.ok) {
-            const err = await profileRes.json();
-            throw new Error(err.detail || 'Ошибка загрузки профиля');
-          }
-          const profileData = await profileRes.json();
-          setProfile(profileData);
-          setIsOwnProfile(false);
-          await loadReviews(profileData.user_id);
-          await loadProjects(profileData.user_id);
-        }
+        const response = await apiFetch('/client/profiles');
+        if (!response.ok) throw new Error('Ошибка загрузки');
+        const data = await response.json();
+        setCompanies(data);
       } catch (err) {
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
+    fetchCompanies();
+  }, []);
 
-    const loadReviews = async (companyId) => {
-      const ratingRes = await apiFetch(`/company-reviews/company/${companyId}/rating`);
-      if (ratingRes.ok) {
-        const ratingData = await ratingRes.json();
-        setAverageRating(ratingData.average);
-        setReviewCount(ratingData.count);
-      }
-      const reviewsRes = await apiFetch(`/company-reviews/company/${companyId}`);
-      if (reviewsRes.ok) {
-        const reviewsData = await reviewsRes.json();
-        setReviews(reviewsData);
-      }
+  // Получаем список уникальных отраслей
+  const allIndustries = useMemo(() => {
+    const industrySet = new Set();
+    companies.forEach(c => {
+      if (c.industry) industrySet.add(c.industry);
+    });
+    return Array.from(industrySet).sort();
+  }, [companies]);
+
+  // Открытие модалки фильтров
+  const openFilters = () => {
+    setLocalFilters({ ...filters });
+    setShowFilters(true);
+  };
+
+  // Применение фильтров
+  const applyFilters = () => {
+    setFilters(localFilters);
+    setShowFilters(false);
+  };
+
+  // Сброс фильтров
+  const resetFilters = () => {
+    const empty = {
+      industries: [],
+      foundedMin: '',
+      foundedMax: '',
+      minRating: '',
     };
+    setLocalFilters(empty);
+    setFilters(empty);
+    setShowFilters(false);
+  };
 
-    const loadProjects = async (companyId) => {
-      const projectsRes = await apiFetch(`/projects/company/${companyId}`);
-      if (projectsRes.ok) {
-        const projectsData = await projectsRes.json();
-        setProjects(projectsData);
+  // Закрытие без сохранения
+  const closeFilters = () => {
+    setShowFilters(false);
+  };
+
+  // Обработчик изменения отраслей в локальных фильтрах
+  const handleIndustryChange = (industry) => {
+    setLocalFilters(prev => {
+      const industries = prev.industries.includes(industry)
+        ? prev.industries.filter(i => i !== industry)
+        : [...prev.industries, industry];
+      return { ...prev, industries };
+    });
+  };
+
+  // Применение фильтров и сортировки
+  const filteredAndSortedCompanies = useMemo(() => {
+    let result = [...companies];
+
+    // Фильтр по отраслям
+    if (filters.industries.length > 0) {
+      result = result.filter(c => filters.industries.includes(c.industry));
+    }
+
+    // Фильтр по году основания
+    if (filters.foundedMin) {
+      result = result.filter(c => c.founded_year >= parseInt(filters.foundedMin));
+    }
+    if (filters.foundedMax) {
+      result = result.filter(c => c.founded_year <= parseInt(filters.foundedMax));
+    }
+
+    // Фильтр по минимальному рейтингу
+    if (filters.minRating) {
+      result = result.filter(c => c.average_rating >= parseFloat(filters.minRating));
+    }
+
+    // Сортировка
+    result.sort((a, b) => {
+      let aVal, bVal;
+      switch (sortBy) {
+        case 'rating':
+          aVal = a.average_rating;
+          bVal = b.average_rating;
+          break;
+        case 'name':
+          aVal = a.company_name || '';
+          bVal = b.company_name || '';
+          break;
+        case 'founded':
+          aVal = a.founded_year || 0;
+          bVal = b.founded_year || 0;
+          break;
+        default:
+          return 0;
       }
-    };
+      if (typeof aVal === 'string' && typeof bVal === 'string') {
+        return sortOrder === 'asc'
+          ? aVal.localeCompare(bVal)
+          : bVal.localeCompare(aVal);
+      } else {
+        if (sortOrder === 'asc') return aVal - bVal;
+        else return bVal - aVal;
+      }
+    });
 
-    fetchProfile();
-  }, [id, navigate]);
+    return result;
+  }, [companies, filters, sortBy, sortOrder]);
 
   if (loading) return <div className="loading">Загрузка...</div>;
   if (error) return <div className="error">{error}</div>;
-  if (!profile) return null;
-
-  const logoUrl = profile.logo
-    ? `http://localhost:8000${profile.logo}`
-    : '/default-company.png';
-
-  const getReviewsWord = (count) => {
-    if (count % 10 === 1 && count % 100 !== 11) return 'отзыв';
-    if (count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 10 || count % 100 >= 20)) return 'отзыва';
-    return 'отзывов';
-  };
-
-  const handleProjectClick = (projectId) => {
-    navigate(`/projects/${projectId}`);
-  };
 
   return (
     <>
       <AuthHeader />
-      <div className="profile-page container">
-        <div className="profile-header">
-          <img src={logoUrl} alt="логотип" className="profile-avatar" />
-          <div className="profile-header-info">
-            <div className="profile-name-row">
-              <h1>{profile.company_name}</h1>
-              {reviewCount > 0 ? (
-                <div className="profile-rating">
-                  {'★'.repeat(Math.round(averageRating))}
-                  {'☆'.repeat(5 - Math.round(averageRating))}
-                  <span className="rating-count">({reviewCount} {getReviewsWord(reviewCount)})</span>
-                </div>
-              ) : (
-                <div className="profile-rating no-reviews">☆ Нет отзывов</div>
-              )}
-            </div>
+      <div className="analysts-page container-wide">
+        <div className="page-header">
+          <h1 className="page-title">Заказчики</h1>
+          <div className="controls">
+            <button className="btn-filters" onClick={openFilters}>
+              Фильтры
+            </button>
+            <select
+              className="sort-select"
+              value={`${sortBy}-${sortOrder}`}
+              onChange={(e) => {
+                const [by, order] = e.target.value.split('-');
+                setSortBy(by);
+                setSortOrder(order);
+              }}
+            >
+              <option value="rating-desc">По рейтингу (сначала высокий)</option>
+              <option value="rating-asc">По рейтингу (сначала низкий)</option>
+              <option value="name-asc">По названию (А→Я)</option>
+              <option value="name-desc">По названию (Я→А)</option>
+              <option value="founded-desc">По году основания (новые)</option>
+              <option value="founded-asc">По году основания (старые)</option>
+            </select>
           </div>
-          {isOwnProfile && (
-            <div className="profile-actions">
-              <button className="btn-edit" onClick={() => navigate('/client/profile/edit')}>
-                Редактировать профиль
-              </button>
-              <button className="btn-create-project" onClick={() => navigate('/projects/create')}>
-                Создать проект
-              </button>
-            </div>
-          )}
         </div>
 
-        <div className="profile-details">
-          {profile.industry && (
-            <div className="detail-row">
-              <span className="detail-label">Сфера:</span>
-              <span className="detail-value">{profile.industry}</span>
-            </div>
-          )}
-          {profile.founded_year && (
-            <div className="detail-row">
-              <span className="detail-label">Год основания:</span>
-              <span className="detail-value">{profile.founded_year}</span>
-            </div>
-          )}
-          {profile.website && (
-            <div className="detail-row">
-              <span className="detail-label">Веб-сайт:</span>
-              <span className="detail-value">
-                <a href={profile.website} target="_blank" rel="noopener noreferrer">
-                  {profile.website}
-                </a>
-              </span>
-            </div>
-          )}
-        </div>
-
-        <div className="profile-description">
-          <h3>О компании</h3>
-          <p>{profile.description || 'Информация не указана'}</p>
-        </div>
-
-        {/* Список проектов */}
-        {projects.length > 0 && (
-          <div className="projects-section">
-            <h2 className="reviews-title">Проекты</h2>
-            <div className="projects-list">
-              {projects.map((project) => (
-                <div
-                  key={project.id}
-                  className="project-card"
-                  onClick={() => handleProjectClick(project.id)}
-                >
-                  <img
-                    src={project.avatar ? `http://localhost:8000${project.avatar}` : '/default-project.png'}
-                    alt={project.title}
-                    className="project-avatar"
-                  />
-                  <div className="project-info">
-                    <h3>{project.title}</h3>
-                    {project.required_specializations && project.required_specializations.slice(0, 2).map((spec) => (
-                      <div key={spec.specialization} className="project-spec">
-                        {spec.specialization}: {spec.hourly_rate} ₽/час
-                      </div>
-                    ))}
-                    {project.required_specializations?.length > 2 && <div className="project-spec">...</div>}
+        {showFilters && (
+          <div className="modal-overlay" onClick={closeFilters}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <h3>Фильтры заказчиков</h3>
+              <div className="filters-form">
+                <div className="filter-group">
+                  <label>Отрасль</label>
+                  <div className="checkbox-group">
+                    {allIndustries.length === 0 ? (
+                      <p className="no-options">Нет доступных отраслей</p>
+                    ) : (
+                      allIndustries.map(ind => (
+                        <label key={ind}>
+                          <input
+                            type="checkbox"
+                            checked={localFilters.industries.includes(ind)}
+                            onChange={() => handleIndustryChange(ind)}
+                          />
+                          {ind}
+                        </label>
+                      ))
+                    )}
                   </div>
                 </div>
-              ))}
+
+                <div className="filter-group">
+                  <label>Год основания</label>
+                  <div className="range-inputs">
+                    <input
+                      type="number"
+                      placeholder="От"
+                      value={localFilters.foundedMin}
+                      onChange={(e) => setLocalFilters({...localFilters, foundedMin: e.target.value})}
+                      min="1900"
+                      max={new Date().getFullYear()}
+                    />
+                    <input
+                      type="number"
+                      placeholder="До"
+                      value={localFilters.foundedMax}
+                      onChange={(e) => setLocalFilters({...localFilters, foundedMax: e.target.value})}
+                      min="1900"
+                      max={new Date().getFullYear()}
+                    />
+                  </div>
+                </div>
+
+                <div className="filter-group">
+                  <label>Минимальный рейтинг</label>
+                  <select
+                    value={localFilters.minRating}
+                    onChange={(e) => setLocalFilters({...localFilters, minRating: e.target.value})}
+                  >
+                    <option value="">Любой</option>
+                    <option value="4">от 4 ★</option>
+                    <option value="3">от 3 ★</option>
+                    <option value="2">от 2 ★</option>
+                    <option value="1">от 1 ★</option>
+                  </select>
+                </div>
+
+                <div className="filter-actions">
+                  <button className="btn-clear" onClick={resetFilters}>Сбросить</button>
+                  <button className="btn-apply" onClick={applyFilters}>Применить</button>
+                </div>
+              </div>
             </div>
           </div>
         )}
-      </div> {/* закрываем profile-page */}
 
-      {/* Отзывы – отдельный блок, как у аналитика */}
-      <div className="profile-reviews-card">
-        <h2 className="reviews-title">
-          Отзывы {reviewCount > 0 && `(${reviewCount})`}
-        </h2>
-        {reviews.length === 0 ? (
-          <p className="no-reviews">Пока нет отзывов</p>
-        ) : (
-          <div className="reviews-list">
-            {reviews.map((review) => (
-              <div key={review.id} className="review-item">
-                <div className="review-header">
-                  <span className="review-rating">
-                    {'★'.repeat(Math.round(review.rating))}
-                    {'☆'.repeat(5 - Math.round(review.rating))}
-                  </span>
-                  <span className="review-date">
-                    {new Date(review.created_at).toLocaleDateString()}
-                  </span>
+        <div className="analysts-list">
+          {filteredAndSortedCompanies.length === 0 ? (
+            <p className="no-results">Нет заказчиков, соответствующих фильтрам</p>
+          ) : (
+            filteredAndSortedCompanies.map((company) => (
+              <Link to={`/client/profile/${company.user_id}`} key={company.id} className="analyst-card">
+                <div className="card-avatar">
+                  <img
+                    src={company.logo ? `http://localhost:8000${company.logo}` : '/default-company.png'}
+                    alt={company.company_name}
+                  />
                 </div>
-                <p className="review-text">{review.text}</p>
-              </div>
-            ))}
-          </div>
-        )}
+                <div className="card-info">
+                  <h3 className="card-name">{company.company_name}</h3>
+                  {company.industry && <div className="card-specialization">{company.industry}</div>}
+                  {company.founded_year && <div className="card-experience">Основана в {company.founded_year}</div>}
+                  <div className={`card-rating ${company.review_count > 0 ? '' : 'no-reviews'}`}>
+                    {company.review_count > 0 ? (
+                      <>
+                        {'★'.repeat(Math.round(company.average_rating))}
+                        {'☆'.repeat(5 - Math.round(company.average_rating))}
+                        <span className="rating-count">({company.review_count})</span>
+                      </>
+                    ) : (
+                      <>☆ Нет отзывов</>
+                    )}
+                  </div>
+                </div>
+              </Link>
+            ))
+          )}
+        </div>
       </div>
     </>
   );
 }
 
-export default ClientProfilePage;
+export default ClientsPage;

@@ -23,3 +23,4 @@ class User(Base):
     given_company_reviews = relationship("CompanyReview", foreign_keys="CompanyReview.reviewer_id", back_populates="reviewer", cascade="all, delete-orphan")
     received_company_reviews = relationship("CompanyReview", foreign_keys="CompanyReview.company_id", back_populates="company", cascade="all, delete-orphan")
     projects = relationship("Project", back_populates="company", cascade="all, delete-orphan")
+    applications = relationship("Application", back_populates="analyst", foreign_keys="Application.analyst_id")

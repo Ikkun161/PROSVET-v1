@@ -14,12 +14,13 @@ from app.api import reviews
 from app.api import company_profiles
 from app.api import company_reviews
 from app.api import projects
+from app.api import applications
 
 # Создаём папку для загружаемых файлов
 os.makedirs("uploads", exist_ok=True)
 
 app = FastAPI(title="ПРОСВЕТ API")
-## Base.metadata.drop_all(bind=engine)   # удаляет все таблицы
+# Base.metadata.drop_all(bind=engine)   # удаляет все таблицы
 Base.metadata.create_all(bind=engine) # создаёт заново
 print("Таблицы созданы (если не было ошибок)")
 
@@ -41,6 +42,7 @@ app.include_router(reviews.router, tags=["reviews"])
 app.include_router(company_profiles.router, tags=["client"])
 app.include_router(company_reviews.router, tags=["company-reviews"])
 app.include_router(projects.router, tags=["projects"])
+app.include_router(applications.router, tags=["applications"])
 
 @app.get("/debug/users")
 def debug_users(db: Session = Depends(get_db)):
