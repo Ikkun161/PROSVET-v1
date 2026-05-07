@@ -90,7 +90,10 @@ function AuthHeader() {
                 <div className="nav-group">
                     <Link to="/analysts" className="nav-link">Аналитики</Link>
                     <Link to="/clients" className="nav-link">Заказчики</Link>
-                    <Link to="/projects" className="nav-link">Проекты</Link> 
+                    <Link to="/projects" className="nav-link">Проекты</Link>
+                    {role === 'client' && (
+                        <Link to="/forecast" className="nav-link">Прогноз продаж</Link>
+                    )}
                     <div className="profile-menu">
                         <Link to={profileLink} className="profile-link">
                             <img src={avatarUrl} alt="avatar" className="mini-avatar" />

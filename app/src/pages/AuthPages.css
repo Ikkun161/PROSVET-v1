@@ -164,7 +164,7 @@
 /* Кнопка отправки */
 .btn-submit {
   margin-top: 0;
-  width: 100%;
+  width: 100% !important;
   padding: 14px;
   background-color: #ED6C4F;
   color: #FFFFFF;

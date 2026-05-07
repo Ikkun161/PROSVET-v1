@@ -1,56 +1,58 @@
-/* ProfilePage.css */
+/* ProfilePage.css – полностью обновлённый, с увеличенными отступами */
 
 .profile-page {
   max-width: 1200px;
   margin: 2rem auto;
-  padding: 2rem;
+  padding: 2.5rem;
   background-color: #F5F1EE;
   border-radius: 24px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
 }
 
-/* Шапка профиля – сетка 12 колонок */
+/* ========== ШАПКА ПРОФИЛЯ ========== */
 .profile-header {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 8px;
-  margin-bottom: 2rem;
-  align-items: center;
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+  margin-bottom: 3rem;
 }
 
 .profile-avatar {
-  grid-column: span 2;
-  width: 100%;
+  width: 180px;
+  height: 180px;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border: 4px solid #ED6C4F;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .profile-header-info {
-  grid-column: span 8;
   display: flex;
   flex-direction: column;
-  gap: 4px; /* отступ между именем и рейтингом */
+  gap: 16px;
+  flex: 1;
 }
 
 .profile-name-row {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 }
 
 .profile-name-row h1 {
   font-family: 'TRY Grtsk', sans-serif;
-  font-size: 36px;
+  font-size: 42px;
   color: #1E1E1E;
-  margin-left: 20px;
+  margin: 0;
 }
 
 .profile-rating {
   font-size: 20px;
   color: #FFB800;
   font-family: 'Fira Sans', sans-serif;
+  display: flex;
+  align-items: center;
 }
 
 .profile-rating.no-reviews {
@@ -58,29 +60,28 @@
 }
 
 .rating-count {
-  color: inherit;
-  margin-left: 4px;
+  color: #666;
+  margin-left: 8px;
   font-size: 14px;
 }
 
-/* Контейнер для кнопок (если их несколько) */
 .profile-actions {
-  grid-column: span 2;
   display: flex;
-  gap: 8px;
-  justify-content: flex-end; /* прижимаем к правому краю */
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
 }
 
 .btn-edit,
-.btn-create-project,
-.btn-view-responses {
+.btn-portfolio {
   padding: 12px 24px;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-family: 'Fira Sans', sans-serif;
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
   white-space: nowrap;
 }
 
@@ -91,60 +92,63 @@
 
 .btn-edit:hover {
   background-color: #d85c3f;
+  transform: translateY(-1px);
 }
 
-.btn-create-project {
-  background-color: #3E5A81;
+.btn-portfolio {
+  background-color: #1E1E1E;
   color: white;
 }
 
-.btn-create-project:hover {
-  background-color: #2e4a6f;
+.btn-portfolio:hover {
+  background-color: #333;
+  transform: translateY(-1px);
 }
 
-.btn-view-responses {
-  background-color: #3E5A81;
-  color: white;
-}
-
-.btn-view-responses:hover {
-  background-color: #2e4a6f;
-}
-
-/* Детали профиля */
+/* ========== ДЕТАЛИ ПРОФИЛЯ ========== */
 .profile-details {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 12px;
-  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 3rem;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 20px;
+  border-radius: 16px;
 }
 
 .detail-row {
-  display: contents;
+  display: flex;
+  align-items: center;
 }
 
 .detail-label {
+  margin-right: 8px;
   font-family: 'TRY Grtsk', sans-serif;
-  font-size: 18px;
+  font-size: 16px;
   color: #1E1E1E;
-  grid-column: span 2;
-  align-self: start;
+  width: 180px;
+  flex-shrink: 0;
 }
 
 .detail-value {
   font-family: 'Fira Sans', sans-serif;
   font-size: 16px;
   color: #4A4A4A;
-  grid-column: span 10;
-  align-self: start;
   word-break: break-word;
 }
 
-/* Блок "О себе" */
+.detail-value a {
+  color: #ED6C4F;
+  text-decoration: none;
+}
+
+.detail-value a:hover {
+  text-decoration: underline;
+}
+
+/* ========== БЛОК "О СЕБЕ" ========== */
 .profile-description {
-  margin-top: 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 3rem;
 }
 
 .profile-description h3 {
@@ -160,134 +164,268 @@
   line-height: 1.6;
   color: #4A4A4A;
   white-space: pre-wrap;
+}
+
+/* ========== БЛОК ПРОЕКТОВ В ПРОФИЛЕ ========== */
+.profile-projects-section {
+  border-top: 1px solid rgba(0,0,0,0.1);
+  padding-top: 2rem;
+  margin-bottom: 3rem;
+}
+
+.projects-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.projects-header h3 {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 24px;
   margin: 0;
 }
 
-.reviews-section {
-  margin-top: 12px;
-  width: 1200px;
-  padding-left: 40px;
+.btn-add-project {
+  background-color: #ED6C4F;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Fira Sans', sans-serif;
+  transition: background 0.2s;
 }
 
-/* Карточка отзывов */
-.profile-reviews-card {
-  width: 1200px;
-  background-color: #F5F1EE;
-  border-radius: 24px;
+.btn-add-project:hover {
+  background-color: #d85c3f;
+}
+
+/* Карточки проектов – увеличенные отступы */
+.projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.project-item {
+  background-color: white;
+  border-radius: 16px;
+  padding: 24px 28px;
+  border: 1px solid #e0e0e0;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.project-item:hover {
+  border-color: #ED6C4F;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.05);
+}
+
+.project-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.project-header-row h4 {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 20px;
+  margin: 0;
+  color: #ED6C4F;
+}
+
+.project-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.project-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  margin-left: 12px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.project-actions button:hover {
+  opacity: 1;
+}
+/* Карточка проекта (используется на странице портфолио и в блоке проектов) */
+/* Карточка проекта – горизонтальное расположение */
+.project-card {
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  border: 1px solid #E8E0DC;
+  display: flex;
+  flex-direction: row !important;      /* ← меняем на row */
+  align-items: flex-start;
+  gap: 20px;                /* отступ между картинкой и текстом */
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  animation: fadeUp 0.5s ease both;
   padding: 24px;
-  margin-top: 12px;
+}
+
+/* Аватар (картинка) проекта – фиксированная ширина, чтобы не сжимался */
+.project-card .card-avatar,
+.project-card .project-avatar {
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+/* Блок с информацией (заголовок, описание, даты) */
+.project-card .card-info,
+.project-card .project-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Заголовок проекта */
+.project-card h3 {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 20px;
+  margin: 0;
+  color: #ED6C4F;
+}
+
+/* Описание */
+.project-card .project-description {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Даты */
+.project-card .project-dates {
+  font-size: 12px;
+  color: #888;
+  margin-top: 8px;
+}
+/* Тег категории (если есть) */
+.project-category-tag {
+  display: inline-block;
+  background-color: #FDF0ED;
+  color: #C0432A;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 14px;
+  font-family: 'Fira Sans', sans-serif;
+}
+
+.project-description {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #4A4A4A;
+  margin: 14px 0;
+}
+
+.project-dates {
+  font-size: 13px;
+  color: #888;
+  font-family: 'Fira Sans', sans-serif;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #F0E8E5;
+}
+
+.btn-show-all {
+  display: block;
+  width: fit-content;
+  margin: 24px auto 0;
+  background: none;
+  border: 1px solid #ED6C4F;
+  color: #ED6C4F;
+  padding: 10px 28px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-family: 'Fira Sans', sans-serif;
+  transition: all 0.2s;
+}
+
+.btn-show-all:hover {
+  background-color: #ED6C4F;
+  color: white;
+}
+
+/* ========== БЛОК ОТЗЫВОВ (единый для всех) ========== */
+.profile-reviews-card {
+  width: 100%;
+  max-width: 1200px;
+  margin: 2rem auto;
+  background-color: white;
+  border-radius: 24px;
+  padding: 28px 32px;
   border: 1px solid #B5A1A1;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+@media (max-width: 1200px) {
+  .profile-reviews-card {
+    width: calc(100% - 40px);
+    margin: 2rem auto;
+  }
 }
 
 .reviews-title {
   font-family: 'TRY Grtsk', sans-serif;
   font-size: 24px;
-  color: #1E1E1E;
-  margin: 0 0 1rem 0;
-  text-align: left;
-}
-
-.no-reviews {
-  text-align: left;
-  font-family: 'Fira Sans', sans-serif;
-  color: #999;
-  padding: 20px;
-  margin: 0;
+  margin-bottom: 1.5rem;
 }
 
 .review-item {
-  background-color: white;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
+  border-bottom: 1px solid #E8E0DC;
+  padding: 20px 0;
 }
 
 .review-item:last-child {
-  margin-bottom: 0;
+  border-bottom: none;
 }
 
 .review-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .review-rating {
   color: #FFB800;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .review-date {
-  color: #999;
-  font-size: 14px;
+  font-size: 13px;
+  color: #888;
 }
 
 .review-text {
   font-family: 'Fira Sans', sans-serif;
   font-size: 16px;
   color: #4A4A4A;
-  line-height: 1.5;
-  margin: 0;
+  line-height: 1.6;
 }
 
+/* ========== ЗАГРУЗКА / ОШИБКА ========== */
 .loading, .error {
   text-align: center;
-  padding: 2rem;
+  padding: 4rem;
   font-family: 'Fira Sans', sans-serif;
-}
-
-/* Стили для проектов */
-.projects-section {
-  margin-top: 2rem;
-}
-
-.projects-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.project-card {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  background-color: #F5F1EE;
-  border-radius: 16px;
-  padding: 16px;
-  cursor: pointer;
-  transition: transform 0.2s, border-color 0.2s;
-  border: 1px solid #B5A1A1;
-}
-
-.project-card:hover {
-  transform: translateY(-2px);
-  border-color: #ED6C4F;
-}
-
-.project-avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 8px;
-  object-fit: cover;
-  border: 2px solid #ED6C4F;
-}
-
-.project-info {
-  flex: 1;
-}
-
-.project-info h3 {
-  font-family: 'TRY Grtsk', sans-serif;
   font-size: 20px;
-  margin: 0 0 8px 0;
-  color: #1E1E1E;
-}
-
-.project-spec {
-  font-family: 'Fira Sans', sans-serif;
-  font-size: 14px;
-  color: #4A4A4A;
-  margin: 2px 0;
 }

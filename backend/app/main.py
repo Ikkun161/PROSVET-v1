@@ -15,6 +15,8 @@ from app.api import company_profiles
 from app.api import company_reviews
 from app.api import projects
 from app.api import applications
+from app.api import forecast
+from app.api import analyst_projects
 
 # Создаём папку для загружаемых файлов
 os.makedirs("uploads", exist_ok=True)
@@ -43,6 +45,8 @@ app.include_router(company_profiles.router, tags=["client"])
 app.include_router(company_reviews.router, tags=["company-reviews"])
 app.include_router(projects.router, tags=["projects"])
 app.include_router(applications.router, tags=["applications"])
+app.include_router(forecast.router, tags=["forecast"])
+app.include_router(analyst_projects.router)
 
 @app.get("/debug/users")
 def debug_users(db: Session = Depends(get_db)):

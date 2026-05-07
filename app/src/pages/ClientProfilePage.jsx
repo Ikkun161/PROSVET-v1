@@ -23,7 +23,6 @@ function ClientProfilePage() {
 
       try {
         if (isMyProfile) {
-          // Свой профиль – нужен токен
           if (!token) {
             navigate('/login');
             return;
@@ -50,7 +49,6 @@ function ClientProfilePage() {
             await loadProjects(companyId);
           }
         } else {
-          // Чужой профиль по ID
           const profileRes = await apiFetch(`/client/profiles/user/${id}`);
           if (profileRes.status === 404) {
             setError('Профиль компании не найден');
@@ -209,11 +207,7 @@ function ClientProfilePage() {
             </div>
           </div>
         )}
-
-        {/* Отзывы */}
-       
-      </div>
-       <div className="reviews-section">
+        <div className="profile-reviews-card">
           <h2 className="reviews-title">
             Отзывы {reviewCount > 0 && `(${reviewCount})`}
           </h2>
@@ -222,7 +216,7 @@ function ClientProfilePage() {
           ) : (
             <div className="reviews-list">
               {reviews.map((review) => (
-                <div key={review.id} className="review-card">
+                <div key={review.id} className="review-item">
                   <div className="review-header">
                     <span className="review-rating">
                       {'★'.repeat(Math.round(review.rating))}
@@ -238,6 +232,10 @@ function ClientProfilePage() {
             </div>
           )}
         </div>
+      </div>
+
+      {/* Отзывы – унифицированный блок (как у аналитика) */}
+
     </>
   );
 }

@@ -19,6 +19,8 @@ import ProjectPage from './pages/ProjectPage';
 import ProjectEditPage from './pages/ProjectEditPage';
 import ProjectsPage from './pages/ProjectsPage';
 import ProjectApplicationsPage from './pages/ProjectApplicationsPage';
+import ForecastPage from './pages/ForecastPage';
+import PortfolioPage from './pages/PortfolioPage';
 
 function App() {
   const [showSessionModal, setShowSessionModal] = useState(false);
@@ -56,6 +58,8 @@ function App() {
         <Route path="/projects/:id/edit" element={<ProjectEditPage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/projects/:id/applications" element={<ProjectApplicationsPage />} />
+        <Route path="/forecast" element={<ForecastPage />} />
+        <Route path="/portfolio" element={<PortfolioPage />} />
       </Routes>
       <SessionExpiredModal
         isOpen={showSessionModal}
