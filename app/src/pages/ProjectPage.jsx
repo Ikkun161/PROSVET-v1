@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom'; // добавили Link
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import AuthHeader from '../components/AuthHeader';
 import { apiFetch } from '../utils/api';
-import './ProjectPage.css';
+import styles from './ProjectPage.module.css'; // ← теперь модуль
 
 function ProjectPage() {
   const { id } = useParams();
@@ -112,8 +112,8 @@ function ProjectPage() {
     }
   };
 
-  if (loading) return <div className="loading">Загрузка...</div>;
-  if (error) return <div className="error">{error}</div>;
+  if (loading) return <div className={styles.loading}>Загрузка...</div>;
+  if (error) return <div className={styles.error}>{error}</div>;
   if (!project) return null;
 
   const isOwner = currentUser && currentUser.id === project.company_id && currentUser.role === 'client';
@@ -134,43 +134,44 @@ function ProjectPage() {
     <>
       <AuthHeader />
       {notification && (
-        <div className={`notification ${notification.type}`}>
+        <div className={`${styles.notification} ${styles[notification.type]}`}>
           {notification.message}
         </div>
       )}
-      <div className="project-page container-wide">
-        <div className="project-header">
-          <img src={avatarUrl} alt="проект" className="project-avatar" />
-          <div className="project-header-info">
+      <div className={`${styles['project-page']} container-wide`}>
+        <div className={styles['project-header']}>
+          <img src={avatarUrl} alt="проект" className={styles['project-avatar']} />
+          <div className={styles['project-header-info']}>
             <h1>{project.title}</h1>
             {company && (
-              // Добавляем ссылку на профиль компании
-              <Link to={`/client/profile/${project.company_id}`} className="company-link">
-                <div className="company-info">
-                  <img src={companyLogoUrl} alt={company.company_name} className="company-logo" />
-                  <div className="company-details">
-                    <span className="company-name">{company.company_name}</span>
+              <Link to={`/client/profile/${project.company_id}`} className={styles['company-link']}>
+                <div className={styles['company-info']}>
+                  <img src={companyLogoUrl} alt={company.company_name} className={styles['company-logo']} />
+                  <div className={styles['company-details']}>
+                    <span className={styles['company-name']}>{company.company_name}</span>
                     {companyRating.count > 0 ? (
-                      <span className="company-rating">
+                      <span className={styles['company-rating']}>
                         {'★'.repeat(Math.round(companyRating.average))}
                         {'☆'.repeat(5 - Math.round(companyRating.average))}
-                        <span className="rating-count">({companyRating.count})</span>
+                        <span className={styles['rating-count']}>({companyRating.count})</span>
                       </span>
                     ) : (
-                      <span className="company-rating no-reviews">☆ Нет отзывов</span>
+                      <span className={`${styles['company-rating']} ${styles['no-reviews']}`}>
+                        ☆ Нет отзывов
+                      </span>
                     )}
                   </div>
                 </div>
               </Link>
             )}
           </div>
-          <div className="project-actions">
+          <div className={styles['project-actions']}>
             {isOwner && (
               <>
-                <button className="btn-edit" onClick={handleEdit}>
+                <button className={styles['btn-edit']} onClick={handleEdit}>
                   Редактировать
                 </button>
-                <button className="btn-view-responses" onClick={handleViewResponses}>
+                <button className={styles['btn-view-responses']} onClick={handleViewResponses}>
                   Посмотреть отклики
                 </button>
               </>
@@ -179,32 +180,32 @@ function ProjectPage() {
         </div>
 
         {project.description && (
-          <div className="project-description">
+          <div className={styles['project-description']}>
             <h3>Описание проекта</h3>
             <p>{project.description}</p>
           </div>
         )}
 
         {project.required_specializations && project.required_specializations.length > 0 && (
-          <div className="specialists-section">
+          <div className={styles['specialists-section']}>
             <h3>Требуемые специалисты</h3>
-            <div className="specialists-grid">
+            <div className={styles['specialists-grid']}>
               {project.required_specializations.map((spec, index) => {
                 const alreadyApplied = appliedSpecializations.includes(spec.specialization);
                 return (
-                  <div key={index} className="specialist-card">
+                  <div key={index} className={styles['specialist-card']}>
                     <h4>{spec.specialization}</h4>
-                    <div className="specialist-price">{spec.hourly_rate} ₽/час</div>
+                    <div className={styles['specialist-price']}>{spec.hourly_rate} ₽/час</div>
                     {isAnalyst && !isOwner && !alreadyApplied && (
                       <button
-                        className="btn-respond-card"
+                        className={styles['btn-respond-card']}
                         onClick={() => handleApplyClick(spec.specialization)}
                       >
                         Откликнуться
                       </button>
                     )}
                     {isAnalyst && alreadyApplied && (
-                      <div className="applied-badge">Вы уже откликнулись</div>
+                      <div className={styles['applied-badge']}>Вы уже откликнулись</div>
                     )}
                   </div>
                 );
@@ -214,7 +215,7 @@ function ProjectPage() {
         )}
 
         {showApplyForm && (
-          <div className="apply-form">
+          <div className={styles['apply-form']}>
             <h3>Отклик на вакансию: {selectedSpecialization}</h3>
             <form onSubmit={handleApply}>
               <textarea
@@ -222,9 +223,9 @@ function ProjectPage() {
                 value={applyMessage}
                 onChange={(e) => setApplyMessage(e.target.value)}
                 rows="3"
-                className="apply-textarea"
+                className={styles['apply-textarea']}
               />
-              <div className="form-actions">
+              <div className={styles['form-actions']}>
                 <button type="submit" disabled={applying}>
                   {applying ? 'Отправка...' : 'Отправить отклик'}
                 </button>

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, JSON
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, JSON, Float
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from app.core.database import Base
@@ -17,3 +17,5 @@ class Project(Base):
 
     company = relationship("User", back_populates="projects")
     applications = relationship("Application", back_populates="project", cascade="all, delete-orphan")
+    category = Column(String, nullable=True) # Поле для ML-тега
+    confidence = Column(Float, nullable=True) # Поле для уверенности модели

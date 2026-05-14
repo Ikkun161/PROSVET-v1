@@ -10,7 +10,7 @@ class UserRole(str, enum.Enum):
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True,  autoincrement=True)
     email = Column(String, unique=True, index=True, nullable=False)
     password = Column(String, nullable=False)   # временно открытый пароль
     ##hashed_password = Column(String, nullable=False)

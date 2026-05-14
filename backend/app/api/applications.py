@@ -3,6 +3,9 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import List
 
+# Импортируем нашу формулу
+from app.ranking import calculate_total_score
+
 from app.core.database import get_db
 from app.core.security import get_current_user
 from app.models.user import User
@@ -69,26 +72,44 @@ def get_project_applications(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
+    # Находим проект
     project = db.query(Project).filter(Project.id == project_id).first()
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
+    
+    # Проверка доступа: только создатель проекта может видеть отклики
     if project.company_id != current_user.id:
         raise HTTPException(status_code=403, detail="Not your project")
     
+    # Получаем все отклики
     applications = db.query(Application).filter(Application.project_id == project_id).all()
     result = []
+    
     for app in applications:
+        # Инфо профиля и статистика
         analyst_profile = db.query(Profile).filter(Profile.user_id == app.analyst_id).first()
         avg_rating = db.query(func.avg(Review.rating)).filter(Review.analyst_id == app.analyst_id).scalar() or 0
         review_count = db.query(Review).filter(Review.analyst_id == app.analyst_id).count()
+        
+        # --- ВЫЗОВ ФОРМУЛЫ РАНЖИРОВАНИЯ ---
+        # В project.category уже лежит скрыто определенная категория
+        score = calculate_total_score(
+            analyst_id=app.analyst_id, 
+            target_project=project, 
+            app_specialization=app.specialization, 
+            db=db
+        )
+        
         analyst_info = AnalystInfo(
             id=app.analyst_id,
-            full_name=analyst_profile.full_name if analyst_profile else "",
-            specialization=analyst_profile.specialization if analyst_profile else "",
+            full_name=analyst_profile.full_name if analyst_profile else "Анонимный аналитик",
+            specialization=analyst_profile.specialization if analyst_profile else app.specialization,
             avatar=analyst_profile.avatar if analyst_profile else None,
-            average_rating=round(avg_rating, 2),
-            review_count=review_count
+            average_rating=round(float(avg_rating), 2),
+            review_count=review_count,
+            matching_score=score  # Передаем в схему
         )
+        
         app_dict = {
             "id": app.id,
             "project_id": app.project_id,
@@ -98,9 +119,13 @@ def get_project_applications(
             "status": app.status,
             "created_at": app.created_at,
             "updated_at": app.updated_at,
-            "analyst": analyst_info
+            "analyst": analyst_info,
+            "matching_score": score
         }
         result.append(app_dict)
+    
+    # Сортируем список по убыванию скора (лучшие сверху)
+    result.sort(key=lambda x: x["matching_score"], reverse=True)
     return result
 
 @router.put("/applications/{app_id}/status", response_model=ApplicationOut)

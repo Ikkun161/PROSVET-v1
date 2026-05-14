@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom'; // добавляем Link
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import AuthHeader from '../components/AuthHeader';
 import { apiFetch } from '../utils/api';
-import './ProfilePage.css';
+import styles from './ProjectApplicationsPage.module.css'; // ← модуль
 
 function ProjectApplicationsPage() {
   const { id } = useParams();
@@ -23,7 +23,9 @@ function ProjectApplicationsPage() {
         const res = await apiFetch(`/applications/project/${id}`);
         if (!res.ok) throw new Error('Ошибка загрузки откликов');
         const data = await res.json();
-        setApplications(data);
+        // Сортировка по убыванию matching_score
+        const sorted = data.sort((a, b) => b.matching_score - a.matching_score);
+        setApplications(sorted);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -53,66 +55,101 @@ function ProjectApplicationsPage() {
     }
   };
 
-  if (loading) return <div className="loading">Загрузка...</div>;
-  if (error) return <div className="error">{error}</div>;
+  // Определяем класс для карточки в зависимости от индекса (топ-3)
+  const getTopClass = (index) => {
+    if (index === 0) return styles['top1'];
+    if (index === 1) return styles['top2'];
+    if (index === 2) return styles['top3'];
+    return '';
+  };
+
+  if (loading) return <div className={styles.loading}>Загрузка...</div>;
+  if (error) return <div className={styles.error}>{error}</div>;
 
   return (
     <>
       <AuthHeader />
-      <div className="profile-page container">
-        <h2 className="reviews-title">Отклики на проект «{projectTitle}»</h2>
+      <div className={`${styles.page} container`}>
+        <h2 className={styles.title}>Отклики на проект «{projectTitle}»</h2>
         {applications.length === 0 ? (
-          <p className="no-reviews">Пока нет откликов</p>
+          <p className={styles['no-applications']}>Пока нет откликов</p>
         ) : (
-          <div className="reviews-list">
-            {applications.map(app => (
-              <div key={app.id} className="review-card" style={{ display: 'block' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  {/* Ссылка на профиль аналитика через аватарку */}
-                  <Link to={`/profile/${app.analyst_id}`}>
-                    <img
-                      src={app.analyst.avatar ? `http://localhost:8000${app.analyst.avatar}` : '/default-avatar.png'}
-                      alt={app.analyst.full_name}
-                      style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover', cursor: 'pointer' }}
-                    />
-                  </Link>
-                  <div style={{ flex: 1 }}>
-                    {/* Ссылка на профиль аналитика через имя */}
-                    <Link to={`/profile/${app.analyst_id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                      <h4 style={{ margin: 0, cursor: 'pointer' }}>{app.analyst.full_name}</h4>
+          <div className={styles.list}>
+            {applications.map((app, index) => {
+              const topClass = getTopClass(index);
+              return (
+                <div key={app.id} className={`${styles.card} ${topClass}`}>
+                  <div className={styles.cardInner}>
+                    {/* Аватар со ссылкой */}
+                    <Link to={`/profile/${app.analyst_id}`} className={styles.avatarLink}>
+                      <img
+                        src={
+                          app.analyst.avatar
+                            ? `http://localhost:8000${app.analyst.avatar}`
+                            : '/default-avatar.png'
+                        }
+                        alt={app.analyst.full_name}
+                        className={styles.avatar}
+                      />
                     </Link>
-                    <p style={{ margin: '4px 0' }}>{app.analyst.specialization}</p>
-                    <div className="profile-rating">
-                      {'★'.repeat(Math.round(app.analyst.average_rating))}
-                      {'☆'.repeat(5 - Math.round(app.analyst.average_rating))}
-                      <span className="rating-count">({app.analyst.review_count})</span>
+
+                    {/* Информация об аналитике */}
+                    <div className={styles.info}>
+                      <Link to={`/profile/${app.analyst_id}`} className={styles.nameLink}>
+                        <h4 className={styles.name}>{app.analyst.full_name}</h4>
+                      </Link>
+                      <p className={styles.specialization}>{app.analyst.specialization}</p>
+                      <div className={styles.rating}>
+                        {'★'.repeat(Math.round(app.analyst.average_rating))}
+                        {'☆'.repeat(5 - Math.round(app.analyst.average_rating))}
+                        <span className={styles.ratingCount}>({app.analyst.review_count})</span>
+                      </div>
+                      <div className={styles.matchingScore}>
+                        Matching Score: {app.matching_score}
+                      </div>
+                    </div>
+
+                    {/* Статус и кнопки управления */}
+                    <div className={styles.actions}>
+                      <span
+                        className={`${styles.statusBadge} ${
+                          app.status === 'pending'
+                            ? styles.statusPending
+                            : app.status === 'accepted'
+                            ? styles.statusAccepted
+                            : styles.statusRejected
+                        }`}
+                      >
+                        {app.status === 'pending'
+                          ? 'Ожидает'
+                          : app.status === 'accepted'
+                          ? 'Принят'
+                          : 'Отклонён'}
+                      </span>
+                      {app.message && (
+                        <p className={styles.message}>Сообщение: {app.message}</p>
+                      )}
+                      {app.status === 'pending' && (
+                        <div className={styles.buttons}>
+                          <button
+                            className={styles.acceptBtn}
+                            onClick={() => handleStatusChange(app.id, 'accepted')}
+                          >
+                            Принять
+                          </button>
+                          <button
+                            className={styles.rejectBtn}
+                            onClick={() => handleStatusChange(app.id, 'rejected')}
+                          >
+                            Отклонить
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                    <span style={{
-                      padding: '4px 8px',
-                      borderRadius: '12px',
-                      backgroundColor: app.status === 'pending' ? '#FFD966' : app.status === 'accepted' ? '#B6D7A8' : '#F4B0B0',
-                      color: '#333',
-                      fontWeight: 'bold'
-                    }}>
-                      {app.status === 'pending' ? 'Ожидает' : app.status === 'accepted' ? 'Принят' : 'Отклонён'}
-                    </span>
-                    {app.message && <p style={{ marginTop: '8px', fontStyle: 'italic' }}>Сообщение: {app.message}</p>}
-                    {app.status === 'pending' && (
-                      <div style={{ marginTop: '8px', display: 'flex', gap: '8px' }}>
-                        <button className="btn-edit" onClick={() => handleStatusChange(app.id, 'accepted')}>
-                          Принять
-                        </button>
-                        <button className="btn-edit" style={{ backgroundColor: '#999' }} onClick={() => handleStatusChange(app.id, 'rejected')}>
-                          Отклонить
-                        </button>
-                      </div>
-                    )}
-                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

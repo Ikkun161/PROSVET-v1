@@ -1,0 +1,226 @@
+/* ProjectApplicationsPage.module.css */
+
+.page {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2.5rem;
+  background-color: #F5F1EE;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+}
+
+.title {
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 24px;
+  margin-bottom: 1.5rem;
+  color: #1E1E1E;
+}
+
+.no-applications {
+  font-family: 'Fira Sans', sans-serif;
+  color: #666;
+  font-size: 16px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---- Карточка отклика (обычная) ---- */
+.card {
+  background-color: white;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.2s ease;
+}
+
+/* Топ‑3 – увеличенный размер (через padding + scale) */
+.card.top1,
+.card.top2,
+.card.top3 {
+  padding: 28px 24px;
+  /* лёгкое увеличение без изменения шрифта (можно добавить transform при желании) */
+}
+
+/* Золото */
+.top1 {
+  border: 2px solid #FFD700;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+  background: linear-gradient(135deg, #FFF9E6 0%, #FFFFFF 100%);
+}
+
+/* Серебро */
+.top2 {
+  border: 2px solid #C0C0C0;
+  box-shadow: 0 4px 12px rgba(192, 192, 192, 0.4);
+  background: linear-gradient(135deg, #F5F5F5 0%, #FFFFFF 100%);
+}
+
+/* Бронза */
+.top3 {
+  border: 2px solid #CD7F32;
+  box-shadow: 0 4px 12px rgba(205, 127, 50, 0.4);
+  background: linear-gradient(135deg, #FDF2E9 0%, #FFFFFF 100%);
+}
+
+/* Внутренний контейнер для флекс-раскладки */
+.cardInner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Аватар */
+.avatarLink {
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid #ED6C4F;
+}
+
+/* Информация об аналитике */
+.info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nameLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.name {
+  margin: 0;
+  font-family: 'TRY Grtsk', sans-serif;
+  font-size: 18px;
+  color: #1E1E1E;
+  cursor: pointer;
+}
+
+.specialization {
+  margin: 0;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 14px;
+  color: #666;
+}
+
+.rating {
+  font-size: 14px;
+  color: #FFB800;
+  font-family: 'Fira Sans', sans-serif;
+}
+
+.ratingCount {
+  color: #666;
+  margin-left: 4px;
+  font-size: 12px;
+}
+
+.matchingScore {
+  margin-top: 6px;
+  padding: 4px 10px;
+  background-color: #ED6C4F;
+  color: white;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: bold;
+  display: inline-block;
+  width: fit-content;
+}
+
+/* Блок действий (статус, кнопки) */
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.statusBadge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #333;
+}
+
+.statusPending {
+  background-color: #FFD966;
+}
+
+.statusAccepted {
+  background-color: #B6D7A8;
+}
+
+.statusRejected {
+  background-color: #F4B0B0;
+}
+
+.message {
+  margin: 0;
+  font-style: italic;
+  font-size: 13px;
+  color: #555;
+  max-width: 200px;
+  text-align: right;
+  word-break: break-word;
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.acceptBtn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #ED6C4F;
+  color: white;
+  cursor: pointer;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 13px;
+  transition: background-color 0.2s;
+}
+
+.acceptBtn:hover {
+  background-color: #d85c3f;
+}
+
+.rejectBtn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #999;
+  color: white;
+  cursor: pointer;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 13px;
+  transition: background-color 0.2s;
+}
+
+.rejectBtn:hover {
+  background-color: #777;
+}
+
+/* Загрузка / ошибка */
+.loading,
+.error {
+  text-align: center;
+  padding: 4rem;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 20px;
+}

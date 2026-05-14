@@ -11,7 +11,10 @@ from app.schemas.project import ProjectCreate, ProjectUpdate, ProjectOut
 from sqlalchemy.orm import joinedload
 from app.models.company_profile import CompanyProfile
 from app.schemas.project import ProjectListItemOut, CompanyInfo
-
+from app.ml.semantic import predict_category
+from app.core.security import get_current_user
+from app.ranking import calculate_total_score   # предполагаю, что ranking.py лежит в app/
+from app.models.profile import Profile          # для получения специализации аналитика
 router = APIRouter()
 
 UPLOAD_DIR = "uploads/projects"
@@ -23,18 +26,36 @@ def create_project(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    # Только компании могут создавать проекты
     if current_user.role != "client":
         raise HTTPException(status_code=403, detail="Only clients can create projects")
-    # Проверяем, есть ли у компании профиль (необязательно, но можно)
-    # Создаём проект
+
+    # Создаём объект проекта
     project = Project(
         company_id=current_user.id,
         **project_data.dict()
     )
+
+    # --- СКРЫТАЯ КАТЕГОРИЗАЦИЯ ---
+    # Объединяем заголовок и описание для лучшего контекста модели
+    text_for_ml = f"{project.title} {project.description or ''}"
+    
+    try:
+        category, confidence = predict_category(text_for_ml)
+        # Эти поля должны быть в твоей модели SQLAlchemy (app/models/project.py)
+        project.category = category 
+        project.confidence = confidence
+    except Exception as e:
+        # Если модель упала, проект всё равно создаем, но с пустой категорией
+        print(f"ML Error: {e}")
+        project.category = "Undefined"
+        project.confidence = 0.0
+
     db.add(project)
     db.commit()
     db.refresh(project)
+    
+    # Так как в схеме ProjectOut нет полей category и confidence, 
+    # фронтенд их не получит, но в БД они запишутся.
     return project
 
 @router.get("/projects/company/{company_id}", response_model=list[ProjectOut])
@@ -93,9 +114,20 @@ def update_project(
 
 
 @router.get("/projects", response_model=list[ProjectListItemOut])
-def get_all_projects(db: Session = Depends(get_db)):
+def get_all_projects(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)   # добавить зависимость
+):
+    
     projects = db.query(Project).options(joinedload(Project.company)).all()
     result = []
+    # Если пользователь аналитик – получаем его специализацию и проекты
+    analyst_profile = None
+    analyst_specialization = None
+    if current_user and current_user.role == 'analyst':
+        analyst_profile = db.query(Profile).filter(Profile.user_id == current_user.id).first()
+        analyst_specialization = analyst_profile.specialization if analyst_profile else None
+    
     for project in projects:
         company_profile = db.query(CompanyProfile).filter(CompanyProfile.user_id == project.company_id).first()
         company_info = None
@@ -105,6 +137,17 @@ def get_all_projects(db: Session = Depends(get_db)):
                 company_name=company_profile.company_name,
                 logo=company_profile.logo
             )
+        
+        matching_score = 0.0
+        if current_user and current_user.role == 'analyst' and analyst_specialization:
+            # Вычислить рейтинг соответствия
+            matching_score = calculate_total_score(
+                analyst_id=current_user.id,
+                target_project=project,
+                app_specialization=analyst_specialization,
+                db=db
+            )
+        
         result.append({
             "id": project.id,
             "company_id": project.company_id,
@@ -113,7 +156,8 @@ def get_all_projects(db: Session = Depends(get_db)):
             "required_specializations": project.required_specializations,
             "avatar": project.avatar,
             "created_at": project.created_at,
-            "company": company_info
+            "company": company_info,
+            "matching_score": matching_score   # добавить
         })
     return result
 # Дополнительно можно добавить обновление и удаление проекта, но пока не нужно

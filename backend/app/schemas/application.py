@@ -30,6 +30,8 @@ class AnalystInfo(BaseModel):
     avatar: Optional[str] = None
     average_rating: float
     review_count: int
+    matching_score: float
 
 class ApplicationWithAnalystOut(ApplicationOut):
     analyst: AnalystInfo
+    matching_score: float = 0.0

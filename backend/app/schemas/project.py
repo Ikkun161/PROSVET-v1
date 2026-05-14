@@ -33,4 +33,6 @@ class CompanyInfo(BaseModel):
     logo: Optional[str] = None
 
 class ProjectListItemOut(ProjectOut):
-    company: CompanyInfo  # добавим информацию о компании
+    company: CompanyInfo
+    matching_score: float = 0.0
+
