@@ -2,112 +2,134 @@ import math
 from datetime import date
 from app.models.analyst_project import AnalystProject
 from app.models.project import Project
-from app.models.user import User
+from app.models.profile import Profile
 
-# ============================================================
-# ТАБЛИЦА СОПОСТАВЛЕНИЯ "СПЕЦИАЛИЗАЦИЯ → КАТЕГОРИЯ"
-# Добавь свои категории. Сюда нужно будет в будущем перенести ML.
-# ============================================================
-SPECIALIZATION_CATEGORY_MAP = {
-    # Data Science / ML
-    "Data Scientist": "Data Science",
-    "Machine Learning Engineer": "Data Science",
-    "ML Engineer": "Data Science",
-    
-    # Data Engineering
-    "Data Engineer": "Data Engineering",
-    "ETL Developer": "Data Engineering",
-    
-    # Business Analysis
-    "Бизнес-аналитик": "Business Analysis",
-    "Business Analyst": "Business Analysis",
-    "System Analyst": "Business Analysis",
-    
-    # BI / Visualization
-    "BI-аналитик": "BI & Visualization",
-    "BI Analyst": "BI & Visualization",
-    "Data Visualization Specialist": "BI & Visualization",
-    
-    # Общие категории
-    "Аналитик данных": "Data Analysis",
-    "Data Analyst": "Data Analysis",
-    "Product Analyst": "Data Analysis",
+# ================================================================
+#  МАТРИЦА СХОДСТВА (0..1) – только твои 6 специализаций
+# ================================================================
+SPEC_SIMILARITY = {
+    # Data Scientist
+    ("Data Scientist", "Data Scientist"): 1.0,
+    ("Data Scientist", "BI-аналитик"): 0.1,
+    ("Data Scientist", "Data Engineer"): 0.5,
+    ("Data Scientist", "Аналитик данных"): 0.5,
+    ("Data Scientist", "Системный аналитик"): 0.1,
+    ("Data Scientist", "Бизнес-аналитик"): 0.1,
+    # BI-аналитик
+    ("BI-аналитик", "Data Scientist"): 0.1,
+    ("BI-аналитик", "BI-аналитик"): 1.0,
+    ("BI-аналитик", "Data Engineer"): 0.1,
+    ("BI-аналитик", "Аналитик данных"): 0.5,
+    ("BI-аналитик", "Системный аналитик"): 0.3,
+    ("BI-аналитик", "Бизнес-аналитик"): 0.5,
+    # Data Engineer
+    ("Data Engineer", "Data Scientist"): 0.5,
+    ("Data Engineer", "BI-аналитик"): 0.1,
+    ("Data Engineer", "Data Engineer"): 1.0,
+    ("Data Engineer", "Аналитик данных"): 0.5,
+    ("Data Engineer", "Системный аналитик"): 0.1,
+    ("Data Engineer", "Бизнес-аналитик"): 0.1,
+    # Аналитик данных
+    ("Аналитик данных", "Data Scientist"): 0.5,
+    ("Аналитик данных", "BI-аналитик"): 0.5,
+    ("Аналитик данных", "Data Engineer"): 0.5,
+    ("Аналитик данных", "Аналитик данных"): 1.0,
+    ("Аналитик данных", "Системный аналитик"): 0.3,
+    ("Аналитик данных", "Бизнес-аналитик"): 0.3,
+    # Системный аналитик
+    ("Системный аналитик", "Data Scientist"): 0.1,
+    ("Системный аналитик", "BI-аналитик"): 0.3,
+    ("Системный аналитик", "Data Engineer"): 0.1,
+    ("Системный аналитик", "Аналитик данных"): 0.3,
+    ("Системный аналитик", "Системный аналитик"): 1.0,
+    ("Системный аналитик", "Бизнес-аналитик"): 0.5,
+    # Бизнес-аналитик
+    ("Бизнес-аналитик", "Data Scientist"): 0.1,
+    ("Бизнес-аналитик", "BI-аналитик"): 0.5,
+    ("Бизнес-аналитик", "Data Engineer"): 0.1,
+    ("Бизнес-аналитик", "Аналитик данных"): 0.3,
+    ("Бизнес-аналитик", "Системный аналитик"): 0.5,
+    ("Бизнес-аналитик", "Бизнес-аналитик"): 1.0,
 }
 
-# Веса для совпадений (настраивай смело)
-MS_EXACT_MATCH = 2.0    # Полное совпадение специализации
-MS_CATEGORY_MATCH = 1.2  # Совпадение по категории
-MS_NO_MATCH = 0.3        # Нет совпадения
-
-def calculate_total_score(analyst_id: int, target_project: Project, app_specialization: str, db):
+def calculate_total_score(
+    analyst_id: int,
+    target_project: Project,
+    app_specialization: str,
+    db
+) -> float:
     """
-    Рассчитывает итоговый Matching Score аналитика для конкретного проекта.
-    Возвращает число в диапазоне от ~5 до ~120+, удобное для фронтенда.
+    Matching Score от 0 до 100.
+    80 баллов – сходство специализаций (матрица),
+    20 баллов – релевантный опыт (логарифм).
     """
-    # --------------------------------------------------------
-    # 1. Берём аналитика (для рейтинга и доп. данных)
-    # --------------------------------------------------------
-    analyst = db.query(User).filter(User.id == analyst_id).first()
-    avg_rating = float(analyst.average_rating) if analyst and analyst.average_rating else 0.0
-    rating_factor = avg_rating / 5.0  # 0 .. 1
+    print("=" * 60)
+    print(f"=== calculate_total_score START ===")
+    print(f"analyst_id = {analyst_id}")
+    print(f"project_id = {target_project.id}, title = '{target_project.title}'")
+    print(f"project.category (специализация проекта) = '{target_project.category}'")
+    print(f"app_specialization (требуемая в отклике) = '{app_specialization}'")
 
-    # --------------------------------------------------------
-    # 2. Match Quality (Ms) — по таблице категорий
-    # --------------------------------------------------------
-    proj_category = target_project.category  # Категория проекта
-    spec_category = SPECIALIZATION_CATEGORY_MAP.get(app_specialization)  # Категория специализации
-
-    if app_specialization == target_project.category:
-        ms = MS_EXACT_MATCH
-    elif spec_category and spec_category == proj_category:
-        ms = MS_CATEGORY_MATCH
+    # 1. Специализация аналитика из профиля
+    # Ищем профиль по user_id (исправлено с analyst_id на user_id)
+    profile = db.query(Profile).filter(Profile.user_id == analyst_id).first()
+    if not profile:
+        print(f"!!! Профиль аналитика {analyst_id} не найден !!!")
+        analyst_spec = None
     else:
-        ms = MS_NO_MATCH
+        analyst_spec = profile.specialization
+        print(f"analyst_specialization (из БД) = '{analyst_spec}'")
 
-    # Mh (сфера) — пока базовая, позже можно расширить
-    mh = 1.0
+    # 2. Коэффициент сходства (матрица)
+    if analyst_spec is None:
+        similarity = 0.1
+        print("similarity (нет данных) = 0.1")
+    else:
+        key = (analyst_spec, app_specialization)
+        similarity = SPEC_SIMILARITY.get(key, 0.1)
+        print(f"similarity key = {key}")
+        print(f"similarity = {similarity}")
 
-    # --------------------------------------------------------
-    # 3. Budget Penalty (P_score)
-    #    1.0 = нет данных, иначе штраф/бонус за попадание в бюджет
-    # --------------------------------------------------------
-    p_score = 1.0
+    spec_score = similarity * 80.0
+    print(f"spec_score = {similarity} * 80 = {spec_score:.1f}")
 
-    # --------------------------------------------------------
-    # 4. Опыт (Days_i) с поправкой на актуальность (K_age)
-    # --------------------------------------------------------
-    analyst_projects = db.query(AnalystProject).filter(
-        AnalystProject.analyst_id == analyst_id
-    ).all()
+    # 3. Опыт (логарифмическая шкала, максимум 20 баллов)
+    analyst_projects = (
+        db.query(AnalystProject)
+        .filter(AnalystProject.analyst_id == analyst_id)
+        .all()
+    )
+    print(f"Найдено проектов аналитика: {len(analyst_projects)}")
 
     today = date.today()
     experience_sum = 0.0
-
-    for p in analyst_projects:
-        end_d = p.end_date or today
-        start_d = p.start_date or today
+    for idx, ap in enumerate(analyst_projects):
+        end_d = ap.end_date or today
+        start_d = ap.start_date or today
         actual_days = max((end_d - start_d).days, 0)
-        days_i = min(actual_days, 540)  # Cap: 1.5 года
+        days_i = min(actual_days, 540)
 
-        # K_age — штраф за старину
         delta_years = (today - end_d).days / 365.25
         k_age = math.exp(-0.15 * delta_years)
 
-        # C_rel — совпадение категорий
-        c_rel = 1.0 if p.category == proj_category else 0.5
+        # c_rel: релевантность категории проекта аналитика к требуемой специализации
+        c_rel = 1.0 if ap.category == app_specialization else 0.5
 
-        experience_sum += (days_i * k_age * c_rel)
+        contribution = days_i * k_age * c_rel
+        experience_sum += contribution
+        print(f"  проект {idx+1}: cat='{ap.category}', days={actual_days}, "
+              f"days_i={days_i}, k_age={k_age:.3f}, c_rel={c_rel}, "
+              f"вклад={contribution:.1f}")
 
-    # --------------------------------------------------------
-    # 5. Итоговая формула: усиленный разброс
-    # --------------------------------------------------------
-    base_score = (ms + mh) * p_score * math.log(1 + experience_sum)
-    total_score = base_score * (1 + rating_factor) * 15  # Масштабирование
+    print(f"experience_sum = {experience_sum:.1f}")
 
-    print(
-        f"=== calculate_total_score: analyst={analyst_id}, "
-        f"target_cat={proj_category}, app_spec={app_specialization}, "
-        f"experience_sum={experience_sum:.1f}, rating={avg_rating}, "
-        f"total_score={total_score:.1f}"
-    )
+    MAX_LOG = math.log(1 + 540)   # ≈ 6.293
+    exp_score = (math.log(1 + experience_sum) / MAX_LOG) * 20.0
+    print(f"exp_score = (log(1+{experience_sum:.1f}) / {MAX_LOG:.3f}) * 20 = {exp_score:.1f}")
+
+    total_score = spec_score + exp_score
+    print(f"total_score = {spec_score:.1f} + {exp_score:.1f} = {total_score:.1f}")
+    print(f"=== calculate_total_score END ===")
+    print("=" * 60 + "\n")
+
     return round(total_score, 1)
